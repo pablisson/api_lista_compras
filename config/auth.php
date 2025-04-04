@@ -14,8 +14,8 @@ return [
     */
 
     'defaults' => [
-        'guard' => env('AUTH_GUARD', 'web'),
-        'passwords' => env('AUTH_PASSWORD_BROKER', 'users'),
+        'guard' =>  'api',
+        'passwords' => 'users',
     ],
 
     /*
@@ -40,6 +40,14 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        /**
+         * o driver keycloak não existe por padrão no laravel por isso precisei criar
+         * o app/Providers/AppServiceProvider.php
+         */
+        'api' => [
+            'driver' => 'keycloak',
+            'provider' => 'users',
+        ],
     ],
 
     /*
@@ -62,8 +70,13 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => App\Models\User::class,
         ],
+
+        // 'users' => [
+        //     'driver' => 'eloquent',
+        //     'model' => env('AUTH_MODEL', App\Models\User::class),
+        // ],
 
         // 'users' => [
         //     'driver' => 'database',

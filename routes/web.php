@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PrivateController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +12,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/public', function () {
+    return 'Esta é uma rota pública.';
+})->name("public");
 
+
+/**
+  * TRECHO QUE FUNCIONOU */
 Route::get('/login/keycloak', function () {
     $query = http_build_query([
         'client_id' => config('keycloak.client_id'),
@@ -21,6 +28,11 @@ Route::get('/login/keycloak', function () {
     ]);
 
     return redirect(config('keycloak.server_url') . "/realms/" . config('keycloak.realm') . "/protocol/openid-connect/auth?$query");
+})->name("login");
+
+
+Route::group(['middleware'=>'auth:api'], function () {
+    Route::apiResource('/private',  'App\Http\Controllers\PrivateController', ['only' => ['index']]);
 });
 
 Route::get('/auth/callback', function (Request $request) {
@@ -34,4 +46,5 @@ Route::get('/auth/callback', function (Request $request) {
 
     return response()->json($response->json());
 });
+
 
