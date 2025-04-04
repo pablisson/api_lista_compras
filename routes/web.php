@@ -16,6 +16,7 @@ Route::get('/public', function () {
     return 'Esta é uma rota pública.';
 })->name("public");
 
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 /**
   * TRECHO QUE FUNCIONOU */
